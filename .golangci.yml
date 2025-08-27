@@ -73,8 +73,6 @@ linters:
     - perfsprint
     - prealloc
     
-    # sql preset (already included in bugs)
-    
     # style preset
     - canonicalheader
     - containedctx
@@ -135,18 +133,11 @@ linters:
     - unused
 
   settings:
-    # asasalint
-    asasalint:
-      use-builtin-exclusions: true
-      ignore-test: false
-    
-    # cyclop
+    # Only include settings that are confirmed to work in v2.4.0
     cyclop:
       max-complexity: 15
       package-average: 0
-      skip-tests: false
     
-    # depguard
     depguard:
       rules:
         main:
@@ -154,15 +145,9 @@ linters:
             - pkg: "github.com/sirupsen/logrus"
               desc: "use standard log/slog instead"
     
-    # dupl
     dupl:
       threshold: 100
     
-    # err113
-    err113:
-      max-stack-depth: 5
-    
-    # errcheck
     errcheck:
       check-type-assertions: true
       check-blank: true
@@ -171,23 +156,16 @@ linters:
         - "io.Copy(*bytes.Buffer)"
         - "io.Copy(os.Stdout)"
     
-    # errorlint
     errorlint:
       errorf: true
-      errorf-multi: true
       asserts: true
       comparison: true
     
-    # exhaustive
     exhaustive:
       check:
         - switch
         - map
-      check-generated: false
-      explicit-exhaustive-switch: true
-      explicit-exhaustive-map: true
     
-    # forbidigo
     forbidigo:
       forbid:
         - pattern: '^print.*$'
@@ -195,34 +173,17 @@ linters:
         - pattern: '^fmt\.Print.*$'
           msg: "use log/slog instead"
     
-    # funlen
     funlen:
       lines: 100
       statements: 50
     
-    # gci
-    gci:
-      sections:
-        - standard
-        - default
-        - prefix(github.com/simonfalke-01/golang-sast)
-    
-    # gocognit
     gocognit:
       min-complexity: 15
     
-    # goconst
     goconst:
       min-len: 2
       min-occurrences: 3
-      ignore-tests: false
-      match-constant: true
-      numbers: false
-      min: 3
-      max: 3
-      ignore-calls: true
     
-    # gocritic
     gocritic:
       enabled-checks:
         - appendAssign
@@ -234,34 +195,27 @@ linters:
         - badRegexp
         - builtinShadow
         - caseOrder
-        - codegenComment
         - commentedOutCode
         - defaultCaseOrder
         - deferInLoop
-        - deprecatedComment
         - dupArg
         - dupBranchBody
         - dupCase
         - dupSubExpr
         - emptyFallthrough
         - equalFold
-        - evalOrder
-        - exitAfterDefer
         - flagDeref
         - flagName
         - hexLiteral
         - ifElseChain
         - importShadow
         - indexAlloc
-        - initClause
         - methodExprCall
         - nestingReduce
         - newDeref
         - nilValReturn
         - octalLiteral
         - offBy1
-        - paramTypeCombine
-        - ptrToRefParam
         - rangeExprCopy
         - rangeValCopy
         - regexpMust
@@ -278,150 +232,70 @@ linters:
         - wrapperFunc
         - yodaStyleExpr
     
-    # gocyclo
     gocyclo:
       min-complexity: 15
     
-    # godot
     godot:
       scope: declarations
-      exclude:
-        - "^fixme:"
-        - "^todo:"
       period: true
       capital: false
     
-    # goheader
     goheader:
       template: |-
         Copyright {{ YEAR }} simonfalke-01
     
-    # goimports
-    goimports:
-      local-prefixes: "github.com/simonfalke-01/golang-sast"
-    
-    # gomodguard
     gomodguard:
       blocked:
         modules:
           - github.com/golang/protobuf:
               reason: "use google.golang.org/protobuf instead"
     
-    # gosec
     gosec:
       severity: "low"
       confidence: "low"
-      includes:
-        - G101
-        - G102
-        - G103
-        - G104
-        - G106
-        - G107
-        - G108
-        - G109
-        - G110
-        - G201
-        - G202
-        - G203
-        - G204
-        - G301
-        - G302
-        - G303
-        - G304
-        - G305
-        - G306
-        - G307
-        - G401
-        - G402
-        - G403
-        - G404
-        - G501
-        - G502
-        - G503
-        - G504
-        - G505
-        - G601
     
-    # govet
     govet:
+      enable-all: false
       enable:
         - assign
         - atomic
-        - atomicalign
         - bools
         - buildtag
         - cgocall
         - composites
         - copylocks
-        - deepequalerrors
         - errorsas
-        - fieldalignment
-        - findcall
-        - framepointer
         - httpresponse
-        - ifaceassert
         - loopclosure
         - lostcancel
         - nilfunc
-        - nilness
         - printf
-        - reflectvaluecompare
-        - shadow
         - shift
-        - sigchanyzer
-        - slog
-        - sortslice
-        - stdmethods
-        - stringintconv
         - structtag
-        - testinggoroutine
         - tests
-        - timeformat
         - unmarshal
         - unreachable
         - unsafeptr
         - unusedresult
-        - unusedwrite
-      enable-all: false
-      disable:
-        - fieldalignment
-      check-shadowing: true
-      settings:
-        printf:
-          funcs:
-            - Printf
-            - Sprintf
-            - Errorf
-            - Warnf
-            - Infof
-            - Debugf
     
-    # ireturn
     ireturn:
       allow:
         - anon
         - error
         - empty
         - stdlib
-        - generic
     
-    # lll
     lll:
       line-length: 120
-      tab-width: 4
     
-    # maintidx
     maintidx:
       under: 20
     
-    # misspell
     misspell:
       locale: US
       ignore-rules:
         - cancelled
     
-    # mnd
     mnd:
       checks:
         - argument
@@ -430,28 +304,13 @@ linters:
         - operation
         - return
         - assign
-      ignored-numbers:
-        - '0'
-        - '1'
-        - '2'
-        - '8'
-        - '10'
-        - '16'
-        - '32'
-        - '64'
-        - '100'
-        - '1000'
-        - '1024'
     
-    # nakedret
     nakedret:
       max-func-lines: 30
     
-    # nestif
     nestif:
       min-complexity: 4
     
-    # nilnil
     nilnil:
       checked-types:
         - ptr
@@ -460,50 +319,29 @@ linters:
         - map
         - chan
     
-    # nlreturn
     nlreturn:
       block-size: 2
     
-    # nolintlint
     nolintlint:
-      allow-leading-space: true
       allow-unused: false
-      allow-no-explanation: []
       require-explanation: true
       require-specific: true
     
-    # paralleltest
     paralleltest:
       ignore-missing: false
-      ignore-missing-subtests: false
     
-    # prealloc
     prealloc:
       simple: true
       range-loops: true
       for-loops: false
     
-    # predeclared
     predeclared:
       ignore:
         - new
         - int
       qualified-name: false
     
-    # promlinter
-    promlinter:
-      strict: false
-      disabled-linters: []
-    
-    # reassign
-    reassign:
-      patterns:
-        - ".*"
-    
-    # revive
     revive:
-      min-confidence: 0.8
-      severity: warning
       rules:
         - name: blank-imports
         - name: context-as-argument
@@ -530,29 +368,16 @@ linters:
         - name: unreachable-code
         - name: redefines-builtin-id
     
-    # sloglint
     sloglint:
       no-mixed-args: true
-      kv-only: false
-      attr-only: false
-      no-global: "all"
       context: "all"
     
-    # staticcheck
     staticcheck:
       checks:
         - "all"
-        - "-SA1019"  # disable deprecation warnings for now
-        - "-SA9003"  # disable empty body warnings for now
+        - "-SA1019"
+        - "-SA9003"
     
-    # stylecheck
-    stylecheck:
-      checks:
-        - "all"
-        - "-ST1000"  # disable package comment warnings for now
-        - "-ST1003"  # disable API naming warnings for now
-    
-    # tagliatelle
     tagliatelle:
       case:
         rules:
@@ -563,11 +388,6 @@ linters:
           avro: snake
           mapstructure: kebab
     
-    # tenv
-    tenv:
-      all: false
-    
-    # testifylint
     testifylint:
       enable:
         - bool-compare
@@ -584,7 +404,6 @@ linters:
         - suite-extra-assert-call
         - suite-thelper
     
-    # thelper
     thelper:
       test:
         first: true
@@ -594,37 +413,22 @@ linters:
         first: true
         name: true
         begin: true
-      tb:
-        first: true
-        name: true
-        begin: true
-      fuzz:
-        first: true
-        name: true
-        begin: true
     
-    # unconvert
     unconvert:
       fast-math: false
       safe: false
     
-    # unparam
     unparam:
       check-exported: false
     
-    # unused
     unused:
       field-writes-are-uses: true
       post-statements-are-reads: false
-      exported-is-used: true
-      exported-fields-are-used: true
       parameters-are-used: true
       local-variables-are-used: true
     
-    # varnamelen
     varnamelen:
       min-name-length: 2
-      max-identifier-length: 30
       check-receiver: false
       check-return: false
       check-type-param: false
@@ -637,15 +441,12 @@ linters:
         - f *foo.Bar
         - e error
         - i int
-        - id string
         - ok bool
     
-    # whitespace
     whitespace:
       multi-if: false
       multi-func: false
     
-    # wrapcheck
     wrapcheck:
       ignore-sigs:
         - .Errorf(
@@ -659,7 +460,6 @@ linters:
         - encoding/*
         - github.com/pkg/*
     
-    # wsl
     wsl:
       strict-append: true
       allow-assign-and-call: true
@@ -670,9 +470,6 @@ linters:
       force-err-cuddling: false
       force-short-decl-cuddling: false
       allow-assign-and-anything: false
-      allow-case-trailing-whitespace: true
-      enforce-err-cuddling: false
-      allow-cuddle-declarations: false
 
   exclusions:
     paths:
@@ -739,17 +536,16 @@ formatters:
       simplify: true
     
     gofumpt:
-      lang-version: "1.24"
       extra-rules: true
     
     goimports:
-      local-prefixes: "github.com/simonfalke-01/golang-sast"
+      local-prefixes:
+        - "github.com/simonfalke-01/golang-sast"
 
 output:
   formats:
     text:
       path: stdout
-      color: true
     json:
       path: golangci-lint-report.json
     checkstyle:
