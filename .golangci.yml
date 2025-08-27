@@ -1,0 +1,138 @@
+# GolangCI-Lint configuration for comprehensive security and quality analysis
+run:
+  timeout: 10m
+  issues-exit-code: 1
+  tests: true
+  skip-dirs:
+    - vendor
+    - .git
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*_test\\.go$"
+
+output:
+  formats:
+    - format: colored-line-number
+    - format: sarif
+      path: golangci-lint-report.sarif
+
+linters-settings:
+  # Security-focused linter settings
+  gosec:
+    # Enable all security checks
+    excludes: []
+    confidence: low
+    severity: low
+  
+  staticcheck:
+    # Enable all staticcheck analyzers
+    checks: ["all"]
+  
+  govet:
+    # Enable all go vet checks
+    enable-all: true
+  
+  cyclop:
+    # Maximum cyclomatic complexity
+    max-complexity: 15
+  
+  dupl:
+    # Duplicate code detection threshold
+    threshold: 100
+  
+  goconst:
+    # Minimum string length for constants
+    min-len: 3
+    # Minimum occurrences for detection
+    min-occurrences: 3
+  
+  misspell:
+    # Locale for spell checking
+    locale: US
+  
+  unused:
+    # Enable checking exported functions
+    check-exported: true
+
+linters:
+  enable:
+    # Security linters
+    - gosec          # Security analyzer
+    - govet          # Go vet built-in analyzer
+    - staticcheck    # Advanced static analysis
+    
+    # Code quality linters  
+    - errcheck       # Unchecked errors
+    - ineffassign    # Ineffective assignments
+    - unused         # Unused code detection
+    - deadcode       # Dead code detection
+    - varcheck       # Unused variables
+    - structcheck    # Unused struct fields
+    
+    # Style and best practices
+    - gofmt          # Code formatting
+    - goimports      # Import formatting
+    - misspell       # Spelling mistakes
+    - unconvert      # Unnecessary conversions
+    - goconst        # Repeated strings as constants
+    - dupl           # Code duplication
+    
+    # Performance and complexity
+    - cyclop         # Cyclomatic complexity
+    - gocognit       # Cognitive complexity
+    - nestif         # Deeply nested if statements
+    - lll            # Line length limit
+    
+    # Bug detection
+    - typecheck      # Type checking errors
+    - gocritic       # Comprehensive Go analyzer
+    - revive         # Replacement for golint
+    
+  disable:
+    - maligned       # Deprecated, use fieldalignment instead
+    - interfacer     # Deprecated
+    - scopelint      # Deprecated, use exportloopref instead
+
+issues:
+  # Maximum issues count per one linter
+  max-issues-per-linter: 50
+  
+  # Maximum count of issues with the same text
+  max-same-issues: 3
+  
+  # Show only new issues created after git revision
+  new-from-rev: HEAD~1
+  
+  # Exclude specific issues
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+    
+    # Exclude known linter issues
+    - linters:
+        - lll
+      source: "^//go:generate "
+    
+    # Exclude gosec for test files
+    - path: _test\.go
+      text: "G404:"  # Use of weak random number generator
+      linters:
+        - gosec
+
+severity:
+  # Default severity for issues
+  default-severity: error
+  
+  # Custom severity rules
+  rules:
+    - linters: [gosec]
+      severity: error
+    - linters: [staticcheck, govet]
+      severity: error
+    - linters: [misspell, gofmt]
+      severity: warning
