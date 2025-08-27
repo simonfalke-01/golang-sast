@@ -1,7 +1,4 @@
-# This workflow uses gosec to scan Go source code for security flaws
-# gosec inspects source code for security problems by scanning the Go AST
-
-name: Security Scan with gosec
+name: Run gosec
 
 on:
   pull_request:
