@@ -185,52 +185,81 @@ linters:
       min-occurrences: 3
     
     gocritic:
-      enabled-checks:
-        - appendAssign
-        - argOrder
-        - assignOp
-        - badCall
-        - badCond
-        - badLock
-        - badRegexp
-        - builtinShadow
-        - caseOrder
-        - commentedOutCode
-        - defaultCaseOrder
-        - deferInLoop
-        - dupArg
-        - dupBranchBody
-        - dupCase
-        - dupSubExpr
-        - emptyFallthrough
-        - equalFold
-        - flagDeref
-        - flagName
-        - hexLiteral
-        - ifElseChain
-        - importShadow
-        - indexAlloc
-        - methodExprCall
-        - nestingReduce
-        - newDeref
-        - nilValReturn
-        - octalLiteral
-        - offBy1
-        - rangeExprCopy
-        - rangeValCopy
-        - regexpMust
-        - singleCaseSwitch
-        - sloppyLen
-        - stringXbytes
-        - switchTrue
-        - typeSwitchVar
-        - underef
-        - unlambda
-        - unnecessaryBlock
-        - unslice
-        - valSwap
-        - wrapperFunc
-        - yodaStyleExpr
+      # Enable all checks for comprehensive analysis
+      enable-all: true
+      
+      # Enable multiple checks by tags in addition to default checks
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+        - experimental
+        - opinionated
+      
+      # Settings passed to gocritic checkers
+      settings:
+        # Whether to restrict captLocal checker to params only
+        captLocal:
+          paramsOnly: false
+        
+        # Min length of the comment that triggers commentedOutCode warning
+        commentedOutCode:
+          minLength: 15
+        
+        # Whether to skip balanced if-else pairs for elseif checker
+        elseif:
+          skipBalanced: true
+        
+        # Size threshold for hugeParam checker
+        hugeParam:
+          sizeThreshold: 80
+        
+        # Min number of if-else blocks that makes ifElseChain warning trigger
+        ifElseChain:
+          minThreshold: 2
+        
+        # Min number of statements inside a branch to trigger nestingReduce warning
+        nestingReduce:
+          bodyWidth: 5
+        
+        # Size threshold for rangeExprCopy checker
+        rangeExprCopy:
+          sizeThreshold: 512
+          skipTestFuncs: true
+        
+        # Size threshold for rangeValCopy checker
+        rangeValCopy:
+          sizeThreshold: 128
+          skipTestFuncs: true
+        
+        # Ruleguard settings
+        ruleguard:
+          # Enable debug to identify rejected conditions
+          debug: ""
+          # Fail on specific error conditions
+          failOn: ""
+          # Rules files (using base-path placeholder)
+          rules: ""
+          # Enable all groups by default
+          enable: ""
+          # No disabled groups
+          disable: ""
+        
+        # Maximum number of results for tooManyResultsChecker
+        tooManyResultsChecker:
+          maxResults: 5
+        
+        # Whether to skip arch-dependent types for truncateCmp
+        truncateCmp:
+          skipArchDependent: true
+        
+        # Whether to skip receiver dereference for underef
+        underef:
+          skipRecvDeref: true
+        
+        # Whether to check exported functions for unnamedResult
+        unnamedResult:
+          checkExported: false
     
     gocyclo:
       min-complexity: 15
