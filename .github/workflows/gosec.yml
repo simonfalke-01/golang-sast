@@ -1,22 +1,53 @@
-name: Run Gosec
+# This workflow uses gosec to scan Go source code for security flaws
+# gosec inspects source code for security problems by scanning the Go AST
+
+name: Security Scan with gosec
+
 on:
-  push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
+    branches: ["main"]
+  push:
+    branches: ["main"]
   workflow_dispatch:
-  
+
+permissions:
+  security-events: write
+  contents: read
+  pull-requests: read
+
 jobs:
-  tests:
+  gosec-scan:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
     steps:
       - name: Checkout Source
-        uses: actions/checkout@v3
-      - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          args: ./...
+          go-version-file: "go.mod"
+          cache: true
+
+      - name: Download Go modules
+        run: go mod download
+
+      - name: Run gosec Security Scanner
+        uses: securecodewarrior/github-action-gosec@master
+        with:
+          args: "-no-fail -fmt sarif -out results.sarif ./..."
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: gosec
+        if: always()
+
+      - name: Upload gosec results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gosec-results
+          path: results.sarif
+        if: always()
